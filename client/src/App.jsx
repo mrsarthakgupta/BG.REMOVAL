@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-300">
       <ToastContainer position="bottom-right" />
       <Navbar />
       <Routes>

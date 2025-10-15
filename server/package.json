@@ -12,20 +12,19 @@
   "license": "ISC",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.67",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "cors": "^2.8.5",
     "data": "^0.6.1",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
-    "form": "^0.2.5",
     "form-data": "^4.0.4",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.0",
-    "multer": "^1.4.5-lts.1",
+    "mongoose": "^8.19.1",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.10",
     "razorpay": "^2.9.6",
-    "svix": "^1.76.0"
+    "svix": "^1.77.0"
   },
   "description": ""
 }
