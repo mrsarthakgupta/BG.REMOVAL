@@ -1,7 +1,5 @@
 import { Webhook } from "svix";
 import userModel from "../models/userModel.js";
-import transactionModel from "../models/transactionModel.js";
-import Razorpay from "razorpay";
 
 // API Controller Function to Manage Clerk User with database
 // http://localhost:4000/api/user/webhooks
