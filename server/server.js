@@ -1,21 +1,30 @@
-import "dotenv/config";
 import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./configs/mongodb.js";
-import useRouter from "./routes/userRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
+dotenv.config();
 
-// App Config
-const PORT = process.env.PORT || 4000;
 const app = express();
-await connectDB();
-
-// Initialized Middlewares
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// API Routes
-app.get('/', (req, res) => res.send("API is working"));
-app.use('/api/user', useRouter);
+// ✅ Connect MongoDB (skipped on Vercel functions auto-load)
+if (process.env.NODE_ENV !== "production") {
+  connectDB();
+}
 
-app.listen(PORT, () => console.log("Server running on port: ",PORT));
+// ✅ Routes
+app.use("/api/users", userRoutes);
+
+app.get("/", (req, res) => res.send("✅ BG Removal API is working"));
+
+const PORT = process.env.PORT || 4000;
+
+// ✅ Local Server only
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+export default app; // ✅ Needed for Vercel

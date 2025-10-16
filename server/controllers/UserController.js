@@ -1,14 +1,11 @@
 import { Webhook } from "svix";
 import userModel from "../models/userModel.js";
 
-// API Controller Function to Manage Clerk User with database
-// http://localhost:4000/api/user/webhooks
-
-const clerkWebhooks = async (req, res) => {
+export const clerkWebhooks = async (req, res) => {
   try {
-    // Create a Svix instance with clerk webhook secret.
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
+    // Verify webhook signature
     await whook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
@@ -23,36 +20,37 @@ const clerkWebhooks = async (req, res) => {
           clerkId: data.id,
           email: data.email_addresses[0].email_address,
           firstName: data.first_name,
-          lastname: data.last_name,
+          lastName: data.last_name,
           photo: data.image_url,
         };
         await userModel.create(userData);
-        res.json({});
         break;
       }
+
       case "user.updated": {
-        const userData = {
+        const updatedData = {
           email: data.email_addresses[0].email_address,
           firstName: data.first_name,
-          lastname: data.last_name,
+          lastName: data.last_name,
           photo: data.image_url,
         };
-        await userModel.findOneAndUpdate({ clerkId: data.id, userData });
-        res.json({});
+        await userModel.findOneAndUpdate({ clerkId: data.id }, updatedData);
         break;
       }
+
       case "user.deleted": {
         await userModel.findOneAndDelete({ clerkId: data.id });
-        res.json({});
         break;
       }
+
       default:
+        console.log("Unhandled Clerk webhook event:", type);
         break;
     }
+
+    res.status(200).json({ success: true });
   } catch (error) {
-    console.log("error :>> ", error.message);
-    res.json({ success: false, message: error.message });
+    console.error("❌ Clerk webhook error:", error.message);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
-
-export { clerkWebhooks};
